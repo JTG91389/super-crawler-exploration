@@ -1,0 +1,79 @@
+
+<div class="row">
+    <button class="btn btn-primary" data-toggle="collapse" href="#collapseTerms" role="button" aria-expanded="false" aria-controls="collapseTerms">
+        Terms
+    </button>
+    <button class="btn btn-primary" data-toggle="collapse" href="#collapseNouns" role="button" aria-expanded="false" aria-controls="collapseNouns">
+        Nouns
+    </button>
+    <button class="btn btn-primary" data-toggle="collapse" href="#collapseVerbs" role="button" aria-expanded="false" aria-controls="collapseVerbs">
+        Verbs
+    </button>
+    <button class="btn btn-primary" data-toggle="collapse" href="#collapseAdjectives" role="button" aria-expanded="false" aria-controls="collapseAdjectives">
+        Adjectives
+    </button>
+    <div class="well collapse" id="collapseTerms">
+        <% if(Array.isArray(summary.terms) && summary.terms.length > 0) { %>
+            <% summary.terms.forEach((term) => { %>
+                <div>
+                    <h2><%= term.text %></h2>
+                    <pre><%= JSON.stringify(term, null, 4) %></pre>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                No Terms...
+                </div>
+            </div>
+        <% } %>
+    </div>
+    <div class="well collapse" id="collapseNouns">
+        <% if(Array.isArray(summary.nouns) && summary.nouns.length > 0) { %>
+            <% summary.nouns.forEach((noun) => { %>
+                <div>
+                    <h2><%= noun.text %></h2>
+                    <pre><%= JSON.stringify(noun, null, 4) %></pre>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                No Nouns...
+                </div>
+            </div>
+        <% } %>
+    </div>
+    <div class="well collapse" id="collapseVerbs">
+        <% if(Array.isArray(summary.verbs) && summary.verbs.length > 0) { %>
+            <% summary.verbs.forEach((verb) => { %>
+                <div>
+                    <h2><%= verb.text %></h2>
+                    <pre><%= JSON.stringify(verb, null, 4) %></pre>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                No Verbs...
+                </div>
+            </div>
+        <% } %>
+    </div>
+    <div class="well collapse" id="collapseAdjectives">
+        <% if(Array.isArray(summary.adjectives) && summary.adjectives.length > 0) { %>
+            <% summary.adjectives.forEach((adjective) => { %>
+                <div>
+                    <h2><%= adjective.text %></h2>
+                    <pre><%= JSON.stringify(adjective, null, 4) %></pre>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                No Adjectives...
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
