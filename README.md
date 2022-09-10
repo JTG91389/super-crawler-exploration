@@ -2,6 +2,16 @@
 
 This is a simple test project for playing around with compromise.js
 
+The primary goal is to build a simple tool that uses compromise to make large collections of text easier to search by contextual clues. 
+
+Search features to explore: 
+-   Search by a subject + predicate(allow filtering by predicate's objects, verbs and complements)
+    ex: John + '[#verb #object] => 'John quickly imported the account models to db2'
+-   Search by Subject + verb
+    ex: Judy + search => ['Judy looked for the docuemnt', 'Judy Searched for the user', 'Judy found the account']
+-   Search by key words + phrase (enter a phrase structure and key words to plug and play into those phrases)
+    ex: Hank + 'doesn't understand' => ['Hank is confused by the documentation', 'Hank needs assistance understanding our process', 'Hank can't understand our user stories without the proper context']
+
 # Setup:
 
 see compromise and pdf-extract docs
@@ -25,3 +35,4 @@ see compromise and pdf-extract docs
 4. Discovery on ways to improve pdf scanning and compromise corpus performance, possibly using postgres as some form of a on disk cache.
 5. Script project setup in docker.
 6. add test coverage for nlpProcessor module
+7. Connect with a slack bot that will allow searching of slack threads, direct messages and channel messages
