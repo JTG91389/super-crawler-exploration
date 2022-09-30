@@ -1,0 +1,78 @@
+<h2><%= source.displayName %> </h2>
+<div class="row">
+    <div class="col-md-4">
+        <span><strong>Domain:</strong> <a href="<%= source.routeDomain %>"></a><%= source.routeDomain %></span>
+    </div>
+    <div class="col-md-8">
+        <h4>Events associated with this source:</h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Event Id</th>
+                    <th scope="col">Sport</th>
+                    <th scope="col">View event details</th>
+                    <th scope="col">Remove event from source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (Array.isArray(source.events) && source.events.length > 0) { %> 
+                    <% source.events.forEach(event => { %>
+                        <tr>
+                            <th scope="row"><%= event.id %></th>
+                            <td><%= event.title %></td>
+                            <td>
+                                <a type="button" href=<%= `/event/${event.id}` %> class="btn btn-primary">
+                                    <%= `See Odds for event: ${event.id}` %>
+                                </a>
+                            </td>
+                            <td>
+                                <form action=<%=`/source/${source.id}/event/${event.id}?_method=DELETE`%> method="POST">
+                                    <button type="submit" class="btn btn-warning">
+                                        <%= `Remove event from source: ${source.id}` %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %> 
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <h4>Events to add to this source:</h4>
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Event Id</th>
+                    <th scope="col">Sport</th>
+                    <th scope="col">View event details</th>
+                    <th scope="col">Add event to source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (Array.isArray(events) && events.length > 0) { %> 
+                    <% events.forEach(event => { %>
+                        <tr>
+                            <th scope="row"><%= event.id %></th>
+                            <td><%= event.title %></td>
+                            <td>
+                                <a type="button" href=<%= `/event/${event.id}` %> class="btn btn-primary">
+                                    <%= `See Odds for event: ${event.id}` %>
+                                </a>
+                            </td>
+                            <td>
+                                <form action=<%=`/source/${source.id}/event/${event.id}?_method=PUT`%> method="POST">
+                                    <button type="submit" class="btn btn-warning">
+                                        <%= `Add event to source: ${source.id}` %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %> 
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

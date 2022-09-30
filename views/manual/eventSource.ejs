@@ -1,0 +1,109 @@
+
+<h2>Events:</h2>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Create new event:</h4>
+        <div class="well">
+            <form action="/manual/event" method="POST">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+            
+                <input type="submit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Event Id</th>
+                    <th scope="col">Sport</th>
+                    <th scope="col">View event details</th>
+                    <th scope="col">delete event</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(Array.isArray(events) && events.length > 0) { %> 
+                    <% events.forEach((event) => { %>
+                        <tr>
+                            <th scope="row"><%= event.id %></th>
+                            <td><%= event.title %></td>
+                            <td>
+                                <a type="button" href=<%= `event/${event.id}` %> class="btn btn-primary">
+                                    <%= `See Odds for event: ${event.id}` %>
+                                </a>
+                            </td>
+                            <td>
+                                <form action=<%=`/manual/event/${event.id}?_method=DELETE`%> method="POST">
+                                    <button type="submit" class="btn btn-warning">
+                                        <%= `delete event: ${event.id}` %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<h2>Sources:</h2>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Create new Source:</h4>
+        <div class="well">
+            <form action="/manual/source" method="POST">
+                <div class="form-group">
+                  <label for="title">Display Name</label>
+                  <input type="text" class="form-control" id="displayname" name="displayName" required>
+                  <label for="title">Domain(fully URI)</label>
+                  <input type="text" class="form-control" id="routeDomain" name="routeDomain" required>
+                </div>
+            
+                <input type="submit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Source Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Domain</th>
+                    <th scope="col">View source details</th>
+                    <th scope="col">Delete event</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(Array.isArray(sources) && sources.length > 0) { %> 
+                    <% sources.forEach((source) => { %>
+                        <tr>
+                            <th scope="row"><%= source.id %></th>
+                            <td><%= source.displayName %></td>
+                            <td><%= source.routeDomain %></td>
+                            <td>
+                                <a type="button" href=<%= `source/${source.id}` %> class="btn btn-primary">
+                                    <%= `See source route details: ${source.id}` %>
+                                </a>
+                            </td>
+                            <td>
+                                <form action=<%=`/manual/source/${source.id}?_method=DELETE`%> method="POST">
+                                    <button type="submit" class="btn btn-warning">
+                                        <%= `delete source: ${source.id}` %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

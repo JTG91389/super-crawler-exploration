@@ -19,6 +19,10 @@ see compromise and pdf-extract docs
 -  pdf extract  setup docs(you need to add some binaries locally)- https://github.com/nisaacson/pdf-extract
 -  setup postgres locally, consider pg_hba.conf and postgresql.conf demands for your machine. - https://www.postgresql.org/download/
 -  run 'npm i'
+-  This project uses puppeteer for complex web pages that are difficult to consistently crawl, it will then use nlp(compromise) to break text down to be more easily parsed from pdf(uses tesseract-ocr). 
+-- to enabled puppeteer to work on your machine, ensur eyou have chrome installed, if you're using wsl, follow the following commands to install chrome in wsl.
+--- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+--- sudo apt -y install ./google-chrome-stable_current_amd64.deb
 -  Run 'seuqelize db:migrate' to create you db(TODO: not currently using postgres in test project yet)
 
 # What will this contain

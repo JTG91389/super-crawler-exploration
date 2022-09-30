@@ -1,0 +1,25 @@
+<div class="row">
+    <% if (alerts.error) { %>
+        <% alerts.error.forEach((msg, idx) => { %>
+            <div id=<%=`error-${idx}`%> class="col-md-12 alert alert-danger"><%= msg %></div>
+       <% }) %>
+    <% } %>
+    
+    <% if (alerts.success) { %>
+        <% alerts.success.forEach((msg, idx) => { %>
+            <div id=<%=`success-${idx}`%> class="col-md-12 alert alert-success"><%= msg %></div>
+       <% }) %>
+    <% } %>
+</div>
+
+<script>
+    addEventListener('DOMContentLoaded', (event) => {
+        console.log(JSON.stringify(event));
+        $('.alert-success').each((idx, ele) => {
+            $(`#success-${idx}`).delay(5000).slideUp(300);
+        })
+        $('.alert-danger').each((idx, ele) => {
+            $(`#error-${idx}`).delay(5000).slideUp(300)
+        })
+    });
+</script>

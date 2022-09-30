@@ -1,0 +1,26 @@
+<h2>Event Odds:</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Source</th>
+            <th scope="col">Link to source records page</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if(Array.isArray(sources) && sources.length > 0) { %> 
+            <% sources.forEach((source) => { %>
+                <tr>
+                    <th scope="row"><%= source.id %></th>
+                    <td><%= source.displayName %></td>
+                    <td>
+                        <a type="button" href=<%= `/manual/event/${event.id}/source/${source.id}` %> class="btn btn-primary">
+                            <%= `See Odds for event odds from this source: ${event.id}` %>
+                        </a>
+                    </td>
+                </tr>
+            <% }) %>
+        <% } %>
+    </tbody>
+</table>
