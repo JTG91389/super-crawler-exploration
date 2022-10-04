@@ -1,0 +1,140 @@
+<link rel="stylesheet" type="text/css" href="/css/record.css">
+
+<div class="row">
+    <div class="col-md-6">
+        <h2><%= record.title %> - <%= record.recordTimeUTC %>  </h2>
+    </div>
+    <div class="col-md-6">
+        <h1><%= conclusion.ip %> <span class="badge <%= conclusion.badge %>"><%= conclusion.state %> </span></h1>
+    </div>
+</div>
+<h4>Record Odds:</h4>
+<div class="row">
+    <div class="col-md-4">
+        <div class="well">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Source</th>
+                        <th scope="col">Implied Probability</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Predicate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(Array.isArray(bestOdds) && bestOdds.length > 0) { %> 
+                        <% bestOdds.forEach((odds) => { %>
+                            <tr>
+                                <td scope="row">
+                                    <a href="<%= odds.sourceUri%>"><%= odds.sourceName %></a>
+                                </td>
+                                <td scope="row">
+                                    <strong><%= odds.ip?.toFixed(4) %></strong>
+                                </td>
+                                <td scope="row">
+                                    <%= odds.teamName %>
+                                </td>
+                                <td scope="row">
+                                    <strong><%= odds.predicate %></strong>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <form action="/record/<%= record.id %>/recordodds" method="POST">
+            <% if(Array.isArray(sources) && sources.length > 0) { %> 
+                <div class="team-select">
+                    <div class="form-group wide">
+                        <div class="dropdown show">
+                            <select name="sourceId" class="btn btn-secondary dropdown-toggle wide" aria-labelledby="dropdownMenuLink" required>
+                                <option value="none" selected disabled hidden>Select source</option>
+                                <% sources.forEach((source) => { %> 
+                                    <option value=<%= source.id %>>
+                                        <%= source.displayName %> 
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <% } %> 
+            <% if(Array.isArray(teams) && teams.length > 0) { %> 
+                <div class="team-select">
+                    <div class="form-group wide">
+                        <div class="dropdown show">
+                            <select name="teamId" class="btn btn-secondary dropdown-toggle wide" aria-labelledby="dropdownMenuLink" required>
+                                <option value="none" selected disabled hidden>Select team</option>
+                                <% teams.forEach((team) => { %> 
+                                    <option value=<%= team.id %>>
+                                        <%= team.name %> 
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            <% if(Array.isArray(predicates) && predicates.length > 0) { %> 
+                <div class="team-select">
+                    <div class="form-group wide">
+                        <div class="dropdown show">
+                            <select name="predicateId" class="btn btn-secondary dropdown-toggle wide" aria-labelledby="dropdownMenuLink" required>
+                                <option value="none" selected disabled hidden>Select predicate</option>
+                                <% predicates.forEach((predicate) => { %> 
+                                    <option value=<%= predicate.id %>>
+                                        <%= predicate.type %> 
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <% } %> 
+            <div class="form-group">
+                <label for="title">Observed Odds(American or decimal)</label>
+                <input type="text" class="form-control" id="importedOdds" name="importedOdds" required> 
+            </div>
+            <button class="btn btn-primary">Add odds</button>  
+        </form>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">RecordOdds Id</th>
+                    <th scope="col">Predicate</th>
+                    <th scope="col">Odds</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Source</th>
+                    <th scope="col">UpdatedAt</th>
+                    <th scope="col">CreatedAt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(Array.isArray(record.recordOdds) && record.recordOdds.length > 0) { %> 
+                    <% record.recordOdds.forEach((odds) => { %>
+                        <% const createdDate = new Date(odds.createdAt) %>
+                        <% const updatedDate = new Date(odds.updatedAt) %> 
+                        <tr>
+                            <th scope="row"><%= odds.id %>
+                            <form action="/record/<%= record.id %>/recordodds/<%= odds.id %>?_method=DELETE" method="POST">
+                                <button type="submit" class="btn btn-warning">Delete</button>
+                            </form></th>
+                            <td scope="row"><%= odds.predicate.type %></td>
+                            <td>
+                                <span><%= odds.importedOdds %></span>
+                                <strong>IP: <%= odds.impliedProbability?.toFixed(4) %></strong>
+                            </td>
+                            <td scope="row"><%= odds.team.name %> </td>
+                            <td scope="row"><%= odds.source.displayName %> </td>
+                            <td scope="row"><%= `${createdDate.getDate}` %> </td>
+                            <td scope="row"><%= odds.createdAt %> </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

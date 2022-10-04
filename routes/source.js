@@ -12,7 +12,10 @@ router.get('/:id', async (req, res) => {
             where: {
                 id
             },
-            include: [db.sourcePage, db.event]
+            include: [{
+                model: db.sourcePage,
+                include: db.event
+            }, db.event]
         });
         const events = await db.event.findAll({
             where: {
@@ -69,13 +72,12 @@ router.put('/:id/event/:eventId', async (req, res) => {
             }
         });
     }
-})
+});
 
 // DELETE Routes
 
 router.delete('/:id/event/:eventId', async (req, res) => {
     const { id, eventId } = req.params;
-    const createdDate = new Date().toISOString();
     try {
         await db.eventSource.destroy({
             where: {
@@ -89,11 +91,31 @@ router.delete('/:id/event/:eventId', async (req, res) => {
         req.flash('error', `Error removing event from source`);
         res.status(405).render('error',  {
             error: {
-                action: 'removing event to source',
+                action: 'removing event from source',
                 message: err.message
             }
         });
     }
-})
+});
+
+router.delete('/sourcePage/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await db.sourcePage.destroy({
+            where: { id: parseInt(id) }
+        });
+        req.flash('success', `Removed source page ${id}`);
+        res.redirect(`/source/${id}`);
+    } catch(err) {
+        console.log(err);
+        req.flash('error', `Error removing source page from source`);
+        res.status(405).render('error',  {
+            error: {
+                action: 'removing source page from source',
+                message: err.message
+            }
+        });
+    }
+});
 
 module.exports = router;

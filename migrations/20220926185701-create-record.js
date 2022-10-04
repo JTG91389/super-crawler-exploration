@@ -12,13 +12,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      sourceId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
       recordTimeUTC: {
         type: Sequelize.DATE,
         allowNull: false
+      },
+      title: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       createdAt: {
         allowNull: false,

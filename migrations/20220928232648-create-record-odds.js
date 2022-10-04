@@ -23,6 +23,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      sourceId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      recordId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

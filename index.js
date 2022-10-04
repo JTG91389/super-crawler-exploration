@@ -46,6 +46,7 @@ app.use('/corpus', require('./routes/corpus'));
 app.use('/manual', require('./routes/manual'));
 app.use('/source', require('./routes/source'));
 app.use('/event', require('./routes/event'));
+app.use('/record', require('./routes/record'));
 app.use('/util', require('./routes/util'));
 
 // WORKER Setup testing

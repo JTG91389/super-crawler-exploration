@@ -1,0 +1,98 @@
+<h2>Event Odds:</h2>
+<div class="row">
+    <h4>event.title</h4>
+</div>
+<h4>Records for this event:</h4>
+<div class="row">
+    <div class="col-md-4">
+        <form action="/event/<%= event.id %>/record" method="POST">
+            <div class="form-group">
+              <label for="title">Record title</label>
+              <input type="text" class="form-control" id="title" name="title" required>
+              <label for="title">Event record time(day of event in UTC)</label>
+              <input type="date" class="form-control" id="recordTimeUtc" name="recordTimeUtc" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create new event record</button>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Record Id</th>
+                    <th scope="col">Record Name</th>
+                    <th scope="col">Record time</th>
+                    <th scope="col">View record Odds</th>
+                    <th scope="col">Delete record and Odds</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(Array.isArray(event.records) && event.records.length > 0) { %> 
+                    <% event.records.forEach((record) => { %>
+                        <tr>
+                            <th scope="row"><%= record.id %></th>
+                            <th scope="row"><%= record.title %></th>
+                            <td scope="row"><%= record.recordTimeUTC %></td>
+                            <td scope="row">
+                                <a type="button" href=<%= `/record/${record.id}` %> class="btn btn-primary">
+                                    <%= `View Odds for record: ${record.id}` %>
+                                </a>
+                            </td>
+                            <td scope="row">
+                                <form action=<%=`/event/${event.id}/record/${record.id}?_method=DELETE`%> method="POST">
+                                    <button type="submit" class="btn btn-warning">
+                                        <%= `Delete record: ${record.id}` %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<h4>Event teams:</h4>
+<div class="row">
+    <div class="col-md-4">
+        <form action="/event/<%= event.id %>/team" method="POST">
+            <div class="form-group">
+              <label for="title">Name</label>
+              <input type="text" class="form-control" id="TeamName" name="name" required>
+              <label for="title">Alternative names(comma dilimeted list)</label>
+              <input type="text" class="form-control" id="TeamNameAlts" name="nameAlts">
+            </div>
+            <button type="submit" class="btn btn-primary">Create new event team</button>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Team Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Alternative names String(comma delimited list)</th>
+                    <th scope="col">Delete team from event</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(Array.isArray(teams) && teams.length > 0) { %> 
+                    <% teams.forEach((team) => { %>
+                        <tr>
+                            <th scope="row"><%= team.id %></th>
+                            <td scope="row"><%= team.name %></td>
+                            <td scope="row"><%= team.nameAlts %></td>
+                            <td scope="row">
+                                <form action=<%=`/event/${event.id}/team/${team.id}?_method=DELETE`%> method="POST">
+                                    <button type="submit" class="btn btn-warning">
+                                        <%= `Delete team: ${team.id}` %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

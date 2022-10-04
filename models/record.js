@@ -12,14 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.record.belongsTo(models.event);
-      models.record.belongsTo(models.source);
-      models.record.hasMany(models.recordOdds)
+      models.record.hasMany(models.recordOdds);
     }
   }
   record.init({
     eventId: DataTypes.INTEGER,
-    recordTimeUTC: DataTypes.DATE,
-    sourceId: DataTypes.INTEGER
+    title: DataTypes.STRING,
+    recordTimeUTC: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'record',

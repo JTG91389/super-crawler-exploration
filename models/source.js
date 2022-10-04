@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.source.belongsToMany(models.event, {through: 'eventSources'});
       models.source.hasMany(models.sourcePage);
-      models.source.hasMany(models.record);
+      models.source.hasMany(models.recordOdds);
     }
   }
   source.init({

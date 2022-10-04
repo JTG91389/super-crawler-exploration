@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       models.recordOdds.belongsTo(models.predicate);
       models.recordOdds.belongsTo(models.record);
       models.recordOdds.belongsTo(models.team);
-
-
+      models.recordOdds.belongsTo(models.source);
     }
   }
   recordOdds.init({
@@ -23,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     recordId: DataTypes.INTEGER,
     importedOdds: DataTypes.STRING,
     impliedProbability: DataTypes.FLOAT,
-    teamId: DataTypes.INTEGER
+    teamId: DataTypes.INTEGER,
+    sourceId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'recordOdds',

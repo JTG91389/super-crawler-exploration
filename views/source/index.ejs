@@ -19,13 +19,13 @@
                     <% source.events.forEach(event => { %>
                         <tr>
                             <th scope="row"><%= event.id %></th>
-                            <td><%= event.title %></td>
-                            <td>
+                            <td scope="row"><%= event.title %></td>
+                            <td scope="row">
                                 <a type="button" href=<%= `/event/${event.id}` %> class="btn btn-primary">
                                     <%= `See Odds for event: ${event.id}` %>
                                 </a>
                             </td>
-                            <td>
+                            <td scope="row">
                                 <form action=<%=`/source/${source.id}/event/${event.id}?_method=DELETE`%> method="POST">
                                     <button type="submit" class="btn btn-warning">
                                         <%= `Remove event from source: ${source.id}` %>
@@ -39,8 +39,54 @@
         </table>
     </div>
 </div>
+<h4 class=>Source pages on this source(html scraper only):</h4>
 <div class="row">
-    <h4>Events to add to this source:</h4>
+    <div class="col-md-4">
+        <a type="button" href=<%= `/sourcePage` %> method="POST" class="btn btn-primary">
+            Create new source page
+        </a>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Source page Id</th>
+                    <th scope="col">Sport</th>
+                    <th scope="col">Uri path</th>
+                    <th scope="col">Dom path</th>
+                    <th scope="col">Edit source page</th>
+                    <th scope="col">Delete source page</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (Array.isArray(source.sourcePages) && source.sourcePages.length > 0) { %> 
+                    <% source.sourcePages.forEach(sourcePage => { %>
+                        <tr>
+                            <th scope="row"><%= sourcePage.id %></th>
+                            <td><%= sourcePage.event.title %></td>
+                            <td><%= sourcePage.uriPath %></td>
+                            <td><%= sourcePage.htmlRoutePath %></td>
+                            <td>
+                                <a type="button" href=<%= `/sourcePage/${sourcePage.id}?_method=PUT` %> method="POST" class="btn btn-primary">
+                                    <%= `edit source page: ${sourcePage.id}` %>
+                                </a>
+                            </td>
+                            <td>
+                                <form action=<%=`sourcePage/${sourcePage.id}?_method=DELETE`%> method="POST">
+                                    <button type="submit" class="btn btn-warning">
+                                        <%= `Delete source page: ${sourcePage.id}` %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %> 
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<h4>Events to add to this source:</h4>
+<div class="row">
     <div class="col-md-12">
         <table class="table table-bordered table-striped">
             <thead>
