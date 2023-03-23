@@ -8,9 +8,23 @@
         <h1><%= conclusion.ip %> <span class="badge <%= conclusion.badge %>"><%= conclusion.state %> </span></h1>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6">
+        <h2> Bet: $<%= profitPotential.bet %>  </h2>
+        <form action="/record/<%= record.id %>/calc" method="POST">
+            <input hidden name="ip" value=<%= conclusion.ip %> />
+            <label>New Bet: </label>
+            <input name="bet" value=<%= profitPotential.bet %> />
+            <button>Submit new bet</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h1> Profit: <strong>$<%= profitPotential.profit %></strong></h1>
+    </div>
+</div>
 <h4>Record Odds:</h4>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="well">
             <table class="table table-bordered table-striped">
                 <thead>
@@ -19,6 +33,9 @@
                         <th scope="col">Implied Probability</th>
                         <th scope="col">Team</th>
                         <th scope="col">Predicate</th>
+                        <th scope="col">Ideal pot %</th>
+                        <th scope="col">Ideal bet amount</th>
+                        <th scope="col">Pay out</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,13 +46,22 @@
                                     <a href="<%= odds.sourceUri%>"><%= odds.sourceName %></a>
                                 </td>
                                 <td scope="row">
-                                    <strong><%= odds.ip?.toFixed(4) %></strong>
+                                    <strong><%= odds.ip %></strong>
                                 </td>
                                 <td scope="row">
                                     <%= odds.teamName %>
                                 </td>
                                 <td scope="row">
                                     <strong><%= odds.predicate %></strong>
+                                </td>
+                                <td>
+                                    <%= odds.betOnPercentage %> %
+                                </td>
+                                <td>
+                                    $ <%= odds.betOn %>
+                                </td>
+                                <td>
+                                    $ <%= odds.payOut %>
                                 </td>
                             </tr>
                         <% }) %>
@@ -99,7 +125,7 @@
             <button class="btn btn-primary">Add odds</button>  
         </form>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-6">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>

@@ -2,12 +2,20 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models');
 const { Op } = require('sequelize');
-const { convertOddsToIP } = require('../modules/utils');
+const { convertOddsToIP,
+    calcProfitPotential,
+    calcIndividualBetInvest,
+    calcIndividualBetPayout } = require('../modules/utils');
 
 // GET routes
 
 router.get('/:id', async (req, res) => {
+    let defaultBet = 100.00;
     const { id } = req.params;
+    const { bet } = req.query;
+    if (bet) {
+        defaultBet = parseFloat(bet);
+    }
     try {
         const record = await db.record.findOne({
             where: {id: parseInt(id) },
@@ -61,17 +69,19 @@ router.get('/:id', async (req, res) => {
                 if (output[key] &&
                     output[key].ip > odds.impliedProbability) {
                     output[key] = {
-                        ip: odds.impliedProbability,
+                        ip: odds.impliedProbability?.toFixed(4),
                         source: odds.source,
                         team: odds.team,
-                        predicate: odds.predicate.type
+                        predicate: odds.predicate.type,
+                        importedOdds: odds.importedOdds
                     }
                 } else if (!output[key]) {
                     output[key] = {
-                        ip: odds.impliedProbability,
+                        ip: odds.impliedProbability?.toFixed(4),
                         source: odds.source,
                         team: odds.team,
-                        predicate: odds.predicate.type
+                        predicate: odds.predicate.type,
+                        importedOdds: odds.importedOdds
                     }
                 }
                 return output;
@@ -81,19 +91,43 @@ router.get('/:id', async (req, res) => {
                     sourceUri: bo.source.routeDomain,
                     ip: bo.ip,
                     teamName: bo.team.name,
-                    predicate: bo.predicate
+                    predicate: bo.predicate,
+                    importedOdds: bo.importedOdds
                 };
             });
             if (bestOdds && bestOdds.length === 3) {
-                const totalIp = bestOdds.reduce((total, bo) => total+= bo.ip, 0.0);
+                const totalIp = bestOdds.reduce((total, bo) => total+= parseFloat(bo.ip), 0.0);
                 conclusion = {
                     state: totalIp >= 100 ? 'Not Arbitragable' : 'Arbitragable',
                     badge:  totalIp >= 100 ? 'badge-danger' : 'badge-success',
-                    ip: totalIp,
+                    ip: totalIp?.toFixed(4),
                 }
+                profitPotential = {
+                    profit: calcProfitPotential(totalIp, defaultBet)?.toFixed(4),
+                    bet: defaultBet
+                }
+                bestOdds = bestOdds.reduce((output, odds) => {
+                    if (totalIp >= 100) {
+                        output.push({
+                            ...odds,
+                            betOnPercentage: 'N/A',
+                            betOn: 'N/A',
+                            payOut: 'N/A'
+                        })
+                    } else {
+                        const individualBetValue = calcIndividualBetInvest(odds.ip, totalIp, defaultBet);
+                        output.push({
+                            ...odds,
+                            betOnPercentage: ((individualBetValue / defaultBet) * 100)?.toFixed(4),
+                            betOn: individualBetValue?.toFixed(4),
+                            payOut: calcIndividualBetPayout(odds.ip, individualBetValue, defaultBet)?.toFixed(3)
+                        })
+                    }
+                    return output;
+                }, [])
             }
         }
-        res.render('record/index', { record, predicates, teams, sources, bestOdds, conclusion });
+        res.render('record/index', { record, predicates, teams, sources, bestOdds, conclusion, profitPotential });
     } catch(err) {
         console.log(err);
         req.flash('error', `Error Loading Record ${id}`);
@@ -191,6 +225,12 @@ router.post('/:id/recordodds', async (req, res) => {
         });
     }
 });
+
+router.post('/:id/calc', (req, res) => {
+    const { ip, bet } = req.body;
+    const { id } = req.params;
+    res.redirect(`/record/${id}?bet=${bet}`);
+})
 
 // DELETE Routes
 
